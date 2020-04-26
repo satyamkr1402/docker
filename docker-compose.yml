@@ -1,0 +1,41 @@
+version: '3'
+
+
+services:
+        dbos:
+                image: mysql:5.7
+                volumes:
+                        - mysql_storage:/var/lib/mysql
+                restart: always
+                environment:
+                        MYSQL_ROOT_PASSWORD: singh1402
+                        MYSQL_USER: satyam
+                        MYSQL_PASSWORD: singh
+                        MYSQL_DATABASE: db
+                networks:
+                        - joomla-network
+
+        jos:
+                image: joomla:latest
+                volumes:
+                        - joomla_storage:/var/www/html
+                restart: always
+                depends_on:
+                        - dbos
+                ports:
+                        - 8081:80
+                environment:
+                        JOOMLA_DB_HOST: dbos
+                        JOOMLA_DB_USER: satyam
+                        JOOMLA_DB_PASSWORD: singh
+                        JOOMLA_DB_NAME: db
+                networks:
+                        - joomla-network
+
+
+volumes:
+        mysql_storage:
+        joomla_storage:
+
+networks:
+        joomla-network:
